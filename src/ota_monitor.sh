@@ -5,22 +5,57 @@
         Contact   : vikiworks.io
 '
 
-BASE_DIR="."
+#----------------- USER CONFIG START ------------------ #
+REMOTE_URL="http://vikiworks.io/downloads"
 
+#Config Version File Name @ remote url
+VERSION_FILE_CFG="cfg_ver.txt"
+
+#Software Version File Name @ remote url
+VERSION_FILE_SW="sw_ver.txt"
+
+#Software File Name @ remote url
+SW_FILE="sw.tar.gz"
+
+#Config File Name @ remote url
+CFG_FILE="config.xml"
+
+#Local Directory To Store Vertion Files, Config File and Software File
+LOCAL_BASE_DIR="./updates"
+
+#Frequency to check software updates @ remote url [ in seconds ]
 UPDATE_CHECK_INTERVAL=10
 
-CUR_CFG_FILE="$BASE_DIR/cfg.txt"
-NEW_CFG_FILE="$BASE_DIR/cfg_update.txt"
 
-CUR_SW_FILE="$BASE_DIR/sw.txt"
-NEW_SW_FILE="$BASE_DIR/sw_update.txt"
+#----------------- USER CONFIG END -------------------- #
 
-REMOTE_SW_VER_FILE="http://vikiworks.io/downloads/sw_update.txt"
-REMOTE_CFG_VER_FILE="http://vikiworks.io/downloads/cfg_update.txt"
-REMOTE_SW="http://vikiworks.io/downloads/sw.tar.gz"
-REMOTE_CFG="http://vikiworks.io/downloads/config.xml"
-LOCAL_SW="sw.tar.gz"
-LOCAL_CFG="config.xml"
+
+
+
+
+
+
+
+
+
+
+# ---------------------- System Files -------------------- #
+
+
+SW_VER_URL="$REMOTE_URL/$VERSION_FILE_SW"
+CFG_VER_URL="$REMOTE_URL/$VERSION_FILE_CFG"
+SW_UPDATE_URL="$REMOTE_URL/$SW_FILE"
+CFG_UPDATE_URL="$REMOTE_URL/$CFG_FILE"
+
+LOCAL_SW="$LOCAL_BASE_DIR/$SW_FILE"
+LOCAL_CFG="$LOCAL_BASE_DIR/$CFG_FILE"
+
+# Hidden Files
+CUR_CFG_FILE="$LOCAL_BASE_DIR/.cur_$VERSION_FILE_CFG"
+NEW_CFG_FILE="$LOCAL_BASE_DIR/.new_$VERSION_FILE_CFG"
+CUR_SW_FILE="$LOCAL_BASE_DIR/.cur_$VERSION_FILE_SW"
+NEW_SW_FILE="$LOCAL_BASE_DIR/.new_$VERSION_FILE_SW"
+
 
 #Arg1 : Remote file name URL [ only http is supported ]
 download(){
@@ -33,33 +68,35 @@ download(){
         mv /tmp/remote_file.ota $LOCAL_FILE 
         sleep 4
     else
-        echo "[ failure ] Remote file download successful : "$LOCAL_FILE
+        echo "[ failure ] Remote file download : [ ${REMOTE_FILE_URL} ]"
     fi
 
 }
 
 check_sw_update(){
-    download $REMOTE_SW_VER_FILE $NEW_SW_FILE
+    echo "[ status  ] Checking for new software update"
+    download $SW_VER_URL $NEW_SW_FILE
     
     CUR_SW_ID="`cat $CUR_SW_FILE`"
     NEW_SW_ID="`cat $NEW_SW_FILE`"
 
-    if [ "$CUR_SW_ID" != $NEW_SW_ID ]; then
+    if [ "$CUR_SW_ID" != "$NEW_SW_ID" ]; then
         echo "[ status  ] New software update available"
-        download $REMOTE_SW $LOCAL_SW
+        download $SW_UPDATE_URL $LOCAL_SW
         mv $NEW_SW_FILE $CUR_SW_FILE
     fi
 }
 
 check_cfg_update(){
-    download $REMOTE_CFG_VER_FILE $NEW_CFG_FILE
+    echo "[ status  ] Checking for new config update"
+    download $CFG_VER_URL $NEW_CFG_FILE
     
     CUR_CFG_ID="`cat $CUR_CFG_FILE`"
     NEW_CFG_ID="`cat $NEW_CFG_FILE`"
 
-    if [ "$CUR_CFG_ID" != $NEW_CFG_ID ]; then
+    if [ "$CUR_CFG_ID" != "$NEW_CFG_ID" ]; then
         echo "[ status  ] New config update available"
-        download $REMOTE_CFG $LOCAL_CFG
+        download $CFG_UPDATE_URL $LOCAL_CFG
         mv $NEW_CFG_FILE $CUR_CFG_FILE
     fi
 }
@@ -74,7 +111,11 @@ init_file(){
 }
 
 ota_app(){
+    echo "[ status  ] OTA Update Monitor"    
+    #Check and Create Directory
 
+    [ ! -d "$LOCAL_BASE_DIR" ] && mkdir -p "$LOCAL_BASE_DIR"
+    
     init_file $CUR_CFG_FILE
     init_file $NEW_CFG_FILE
     init_file $CUR_SW_FILE
@@ -82,7 +123,6 @@ ota_app(){
 
     while [ 1 ]
     do
-        echo "[ status  ] checking for new firmware / config update"
         check_sw_update
         check_cfg_update
         sleep $UPDATE_CHECK_INTERVAL

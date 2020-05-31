@@ -56,6 +56,50 @@ NEW_CFG_FILE="$LOCAL_BASE_DIR/.new_$VERSION_FILE_CFG"
 CUR_SW_FILE="$LOCAL_BASE_DIR/.cur_$VERSION_FILE_SW"
 NEW_SW_FILE="$LOCAL_BASE_DIR/.new_$VERSION_FILE_SW"
 
+backup_old_config(){
+    echo "[ status  ] backup old config"
+
+}
+
+backup_old_software(){
+    echo "[ status  ] backup old software"
+}
+
+restore_old_software(){
+    echo "[ status  ] restoring previous working software"
+
+}
+
+restore_old_config(){
+    echo "[ status  ] restoring previous working config"
+
+}
+
+verify_config_installation(){
+    echo "[ status  ] Verifying new config install"
+    #On Failure
+    #restore_old_config
+}
+
+verify_software_installation(){
+    echo "[ status  ] Verifying new software install"
+    #On Failure
+    #restore_old_software
+}
+
+install_new_config(){
+    backup_old_config
+    echo "[ status  ] Installing new config update"
+    verify_config_installation
+}
+
+install_new_software(){
+    backup_old_software
+    echo "[ status  ] Installing new software update"
+    verify_software_installation
+}
+
+
 
 #Arg1 : Remote file name URL [ only http is supported ]
 download(){
@@ -66,7 +110,7 @@ download(){
     if [ $? -eq 0 ]; then
         #echo "[ status  ] Remote file download successful : "$LOCAL_FILE
         mv /tmp/remote_file.ota $LOCAL_FILE 
-        sleep 4
+        sleep 1
     else
         echo "[ failure ] Remote file download : [ ${REMOTE_FILE_URL} ]"
     fi
@@ -84,6 +128,7 @@ check_sw_update(){
         echo "[ status  ] New software update available"
         download $SW_UPDATE_URL $LOCAL_SW
         mv $NEW_SW_FILE $CUR_SW_FILE
+        install_new_software
     fi
 }
 
@@ -98,6 +143,7 @@ check_cfg_update(){
         echo "[ status  ] New config update available"
         download $CFG_UPDATE_URL $LOCAL_CFG
         mv $NEW_CFG_FILE $CUR_CFG_FILE
+        install_new_config
     fi
 }
 
@@ -116,13 +162,15 @@ ota_app(){
 
     [ ! -d "$LOCAL_BASE_DIR" ] && mkdir -p "$LOCAL_BASE_DIR"
     
-    init_file $CUR_CFG_FILE
-    init_file $NEW_CFG_FILE
-    init_file $CUR_SW_FILE
-    init_file $NEW_SW_FILE
-
     while [ 1 ]
     do
+        #Checking Every time -> There are chances user accidentally delete these files
+
+        init_file $CUR_CFG_FILE
+        init_file $NEW_CFG_FILE
+        init_file $CUR_SW_FILE
+        init_file $NEW_SW_FILE
+
         check_sw_update
         check_cfg_update
         sleep $UPDATE_CHECK_INTERVAL

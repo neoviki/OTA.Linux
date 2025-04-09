@@ -1,4 +1,4 @@
-# OTA.Linux: Generic Linux Utility to Update Linux-Based Applications with Over-The-Air (OTA) Programming
+## Linux Utility to Update Linux-Based Applications with Over-The-Air (OTA) Updates
 
 This utility allows you to perform **Over The Air (OTA) programming** on Linux systems. I am using this to update a set of Raspberry Pis, which monitor various features in my apartment, greenhouse garden, and file server, with the latest application. It facilitates the downloading and installation of the latest versions of applications, libraries, and configurations over the HTTP protocol.
 

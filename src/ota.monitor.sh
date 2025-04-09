@@ -1,4 +1,5 @@
-: '
+#!/bin/bash
+'
     OTA Update Utility
 
         Author    : Viki ( V Natarajan )
@@ -6,7 +7,7 @@
 '
 
 #----------------- USER CONFIG START ------------------ #
-REMOTE_URL="http://vikiworks.io/downloads"
+REMOTE_URL="http://viki.design/downloads"
 
 #Config Version File Name @ remote url
 VERSION_FILE_CFG="cfg_ver.txt"
@@ -28,8 +29,6 @@ UPDATE_CHECK_INTERVAL=10
 
 
 #----------------- USER CONFIG END -------------------- #
-
-
 
 
 

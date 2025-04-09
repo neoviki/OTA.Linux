@@ -15,7 +15,7 @@ This utility is fully written in **bash**.
    ```bash
    ./install.sh
    ```
-   This will add the OTA updater daemon (`ota.monitor`) to the startup script, ensuring that it starts and runs on every reboot. The script will be added to `rc.local` to make sure it's executed automatically.
+   This will add the OTA updater daemon (`ota.monitor`) to the startup script, ensuring that it starts and runs on every reboot. The script will be added to `rc.local` to make sure it is executed automatically.
 
 
 ## Server File Structure

@@ -1,8 +1,8 @@
 : '
     OTA Update Utility
 
-        Author    : Viki - Vignesh Natarajan
-        Contact   : vikiworks.io
+        Author    : Viki ( V Natarajan )
+        Contact   : viki.design
 '
 
 #----------------- USER CONFIG START ------------------ #
@@ -109,7 +109,7 @@ download(){
     wget -q $REMOTE_FILE_URL -O /tmp/remote_file.ota
     if [ $? -eq 0 ]; then
         #echo "[ status  ] Remote file download successful : "$LOCAL_FILE
-        mv /tmp/remote_file.ota $LOCAL_FILE 
+        mv /tmp/remote_file.ota $LOCAL_FILE
         sleep 1
     else
         echo "[ failure ] Remote file download : [ ${REMOTE_FILE_URL} ]"
@@ -120,7 +120,7 @@ download(){
 check_sw_update(){
     echo "[ status  ] Checking for new software update"
     download $SW_VER_URL $NEW_SW_FILE
-    
+
     CUR_SW_ID="`cat $CUR_SW_FILE`"
     NEW_SW_ID="`cat $NEW_SW_FILE`"
 
@@ -135,7 +135,7 @@ check_sw_update(){
 check_cfg_update(){
     echo "[ status  ] Checking for new config update"
     download $CFG_VER_URL $NEW_CFG_FILE
-    
+
     CUR_CFG_ID="`cat $CUR_CFG_FILE`"
     NEW_CFG_ID="`cat $NEW_CFG_FILE`"
 
@@ -153,15 +153,15 @@ init_file(){
         echo "[ status  ] Creating $FILE file"
         touch $FILE
         echo "0" > $FILE
-    fi 
+    fi
 }
 
 ota_app(){
-    echo "[ status  ] OTA Update Monitor"    
+    echo "[ status  ] OTA Update Monitor"
     #Check and Create Directory
 
     [ ! -d "$LOCAL_BASE_DIR" ] && mkdir -p "$LOCAL_BASE_DIR"
-    
+
     while [ 1 ]
     do
         #Checking Every time -> There are chances user accidentally delete these files

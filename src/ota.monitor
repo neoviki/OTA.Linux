@@ -1,12 +1,15 @@
 #!/bin/bash
-'
-    OTA Update Utility
 
-        Author    : Viki ( V Natarajan )
-        Contact   : viki.design
-'
+#-------------------------------------------------------------#
+# UTILITY DETAILS | OVER THE AIR - LINUX APP UPDATE UTILITY   #
+#-------------------------------------------------------------#
+#          AUTHOR | VIKI (A) V NATARAJAN                      #
+#-------------------------------------------------------------#
+#         CONTACT | WWW.VIKI.DESIGN                           #
+#-------------------------------------------------------------#
 
-#----------------- USER CONFIG START ------------------ #
+
+#----------------- USER CONFIG START ------------------------ #
 REMOTE_URL="http://viki.design/downloads"
 
 #Config Version File Name @ remote url
@@ -28,7 +31,7 @@ LOCAL_BASE_DIR="./updates"
 UPDATE_CHECK_INTERVAL=10
 
 
-#----------------- USER CONFIG END -------------------- #
+#----------------- USER CONFIG END -------------------------- #
 
 
 
@@ -38,7 +41,7 @@ UPDATE_CHECK_INTERVAL=10
 
 
 
-# ---------------------- System Files -------------------- #
+# ---------------------- System Files ----------------------- #
 
 
 SW_VER_URL="$REMOTE_URL/$VERSION_FILE_SW"
